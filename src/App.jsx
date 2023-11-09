@@ -1,11 +1,16 @@
 import { useState } from 'react'
 import Header from './components/header'
+import Body from './components/body'
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [response, setResponse] = useState([])
+  const [busca, setBusca] = useState("")
 
     return (
-      <Header />
+      <div>
+        <Header setResponse={setResponse} setBusca={setBusca}/>
+        <Body response={busca ? response:"/"}/>
+      </div>
     )
 }
 
