@@ -1,20 +1,14 @@
 import React, { useEffect } from 'react'
-import Header from './header'
+import TableRow from './tablerow'
 
-const body = (response) => {
-    const loadMovies = () => { 
-            response.Search.foreach((movie) => {
-            console.log(movie.tittle)
-        })
-    }
-
-    /*useEffect(() => {
-        loadMovies()
-    }, ["#a"])*/
-
+const body = ({response}) => {
   return (
-    <div>
-        <button id='a'>A</button>
+    <div className="flex-col justify-center items-center text-center">
+        {
+          response.map((item, index) => (
+            <TableRow key={index} index={index} Title={item.Title} Year={item.Year} Type={item.Genre} Poster={item.Poster}/>
+          ))
+        }
     </div>
   )
 }

@@ -3,11 +3,10 @@ import { FaSistrix } from "react-icons/fa6";
 import { FaX } from "react-icons/fa6";
 import apiService from '../service/search'
 
-const apiKey = process.env.REACT_APP_MOVIE_API_KEY;
-
-const Header = (props) => {
+const Header = ({handleValues}) => {
     const [scrollY, setScrollY] = useState(0);
     const [search, setSearch] = useState("");
+    const [response, setResponse] = useState([]);
 
     useEffect(() => {
         const handleScroll = () => setScrollY(window.scrollY);
@@ -26,18 +25,23 @@ const Header = (props) => {
     }
 
     useEffect(() => {
-        async function fetchData(){
-            try{
-                const result = await apiService.fetchMovies(search)
-                props.setResponse(result)
-            }catch(error) {
-                console.log(error)
-            }
+        if(response.Search === undefined){
+            console.log("loading...")
+        }else{
+            handleValues(response.Search)
         }
-    }, [search])
+    }, [response])
+
+    function saveValue(values){
+        setResponse(values)
+    }
+
+    function handleSearch() {
+       apiService.fetchData(search, saveValue)
+    }
 
     return (
-        <div id='header' className={`flex justify-between items-center w-screen h-16  ${scrollY > 1 ? 'fixed top-0 left-0 right-0 bg-violet-500' : 'bg-violet-500'}`}>
+        <div id='header' className={`flex st justify-between items-center w-screen h-16  ${scrollY > 1 ? 'sticky top-0 left-0 right-0 bg-stone-800 opacity-90' : 'bg-stone-800'}`}>
             <div className='ml-10'>
                 <h1 className='font-mono text-3xl text-white'>
                     Logo
@@ -50,12 +54,13 @@ const Header = (props) => {
                 onChange={(e) => setSearch(e.target.value)} 
                 placeholder='Pesquise seu filme aqui...' 
                 className='w-full rounded-sm focus:outline-none px-5' />
-                <a href='#' id='ID' className='font-mono fixed z-10 right-1/4'><FaSistrix className='text-2xl' color='black' /></a>
+                <a href='#' onClick={handleSearch} className='font-mono fixed z-10 right-1/4'><FaSistrix className='text-2xl' color='black' /></a>
             </div>
             <div className='flex justify-start items-center mr-10'>
                 <a href="" onClick={eventOpenSearch} id='searchOpen' className='font-mono w-full'><FaSistrix className='text-2xl' color='white' /></a>
                 <div className='invisible flex justify-between fixed z-10 w-10'>
                     <a href="" onClick={eventOpenSearch} id='close' className='font-mono'><FaX className='text-2xl' color='white' /></a>
+                    
                 </div>
             </div>
         </div>
